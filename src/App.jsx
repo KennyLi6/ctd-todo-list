@@ -3,11 +3,6 @@ import TodoList from './TodoList'
 
 function App() {
 
-  const todoList = [
-    {id: 1, title: "read lesson"},
-    {id: 2, title: "view resources"},
-    {id: 3, title: "code app"}
-  ]
 
   return (
     <div>

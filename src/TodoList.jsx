@@ -1,10 +1,9 @@
 import TodoListItem from "./TodoListItem";
 
-function TodoList({todoList, todos}) {
+function TodoList({todoList}) {
 
     return (
         <ul>
-            {todos}
             {todoList.map((todo) => (
                 <TodoListItem 
                     key={todo.id}

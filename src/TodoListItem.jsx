@@ -2,7 +2,7 @@ function TodoListItem({ todo }) {
 
     return (
         <li>
-            {todo.map((todo) => {todo.title})}
+            {todo.title}
         </li>
     );
 }

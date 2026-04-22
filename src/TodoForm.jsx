@@ -21,8 +21,17 @@ function TodoForm({onAddTodo}) {
     return (
         <form>
             <label htmlFor="todoTitle">Todo</label>
-            <input type="text" id="todoTitle" />
-            <button type="submit" disabled>Add Todo</button>
+            <input 
+                ref={inputRef}
+                type="text"
+                id="todoTitle"
+                name="todoTitle"
+                placeholder={'Todo text'}
+                required 
+            />
+            <button type="submit" onClick={handleAddTodo}>
+                Add Todo
+            </button>
         </form>
     );
 }

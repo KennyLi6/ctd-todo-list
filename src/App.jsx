@@ -18,12 +18,12 @@ function App() {
   }
 
   function completeTodo(id) {
-    const todoList = todoList.map(todo => (
+    const updatedTodoList = todoList.map(todo => (
       todo.id == id ? 
         todo = {...todo, isCompleted: true} :
         todo
     ))
-    setTodoList(todoList);
+    setTodoList(updatedTodoList);
   }
 
   return (

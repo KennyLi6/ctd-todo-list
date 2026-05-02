@@ -11,23 +11,19 @@ function App() {
     const newTodo = {
       id: Date.now(), 
       title: todoTitle,
-      isCompeleted: false
+      isCompleted: false
     }
 
     setTodoList(previous => [newTodo, ...previous])
   }
 
   function completeTodo(id) {
-    let todo = todoList.map(todo => {
-      if (todo.id == id) {
-        return todo;
-      }
-    })
-    console.log(todo)
-    if (todo !== undefined) {
-      todo = {...todo, isCompeleted: true}
-      setTodoList(previous => [todo, ...previous])
-    }
+    const todoList = todoList.map(todo => (
+      todo.id == id ? 
+        todo = {...todo, isCompleted: true} :
+        todo
+    ))
+    setTodoList(todoList);
   }
 
   return (

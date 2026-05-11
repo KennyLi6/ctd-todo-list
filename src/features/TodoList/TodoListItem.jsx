@@ -1,6 +1,7 @@
 import TextInputWithLabel from "../../shared/TextInputWithLabel";
 import { isValidTodoTitle } from "../../utils/todoValidation";
 import { useEditableTitle } from "../../hooks/useEditableTitle";
+import { useRef } from "react";
 
 function TodoListItem({ todo, onCompleteTodo, onUpdateTodo }) {
     const {
@@ -11,6 +12,7 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo }) {
         updateTitle,
         finishEdit
     } = useEditableTitle(todo.title);
+    const todoInput = useRef(null);
 
     function handleCancel() {
         cancelEdit();
@@ -37,6 +39,9 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo }) {
                         <TextInputWithLabel 
                             value={workingTitle}
                             onChange={handleEdit}
+                            ref={todoInput}
+                            elementId={todo.id}
+                            label="Todo"
                         />
                         <button
                             type="button"

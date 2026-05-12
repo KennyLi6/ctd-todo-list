@@ -41,7 +41,7 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo }) {
                             onChange={handleEdit}
                             ref={todoInput}
                             elementId={todo.id}
-                            label="Todo"
+                            labelText="Todo"
                         />
                         <button
                             type="button"

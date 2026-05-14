@@ -33,15 +33,46 @@ function TodosPage({ token }) {
         if (token) {fetchTodos();}
     }, [token]);
 
-    function addTodo(todoTitle) {
+    async function addTodo(todoTitle) {
+        const tempId = Date.now();
         const newTodo = {
-        id: Date.now(), 
-        title: todoTitle,
-        isCompleted: false
+            id: tempId, 
+            title: todoTitle,
+            isCompleted: false
         }
 
         setTodoList(previous => [newTodo, ...previous])
-    }
+
+        try {
+            const response = await fetch('/api/tasks', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': token,
+                },
+                body: JSON.stringify({
+                    title: newTodo.title,
+                    isCompleted: newTodo.isCompleted,
+                }),
+                credentials: 'include'
+            });
+            if (!response.ok) {
+                throw new Error(response.message || 'Failed to add todo');
+            }
+            const savedTodo = await response.json();
+
+            setTodoList((previous) =>
+                previous.map((todo) => (todo.id === tempId ? savedTodo : todo))
+            );
+        } catch (error) {
+            setError(
+                `Error adding todo: ${newTodo.title} | Error message: ${error.message}`
+            );
+            setTodoList((previous) =>
+                previous.filter((todo) => todo.id !== tempId)
+            );
+        }
+    };
 
     function completeTodo(id) {
         const updatedTodoList = todoList.map(todo => (

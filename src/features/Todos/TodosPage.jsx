@@ -76,7 +76,7 @@ function TodosPage({ token }) {
 
     async function completeTodo(id) {
         const originalTodo = todoList.find((todo) => todo.id === id);
-
+        
         const updatedTodoList = todoList.map(todo => (
         todo.id === id ? 
             todo = {...todo, isCompleted: true} :
@@ -93,7 +93,7 @@ function TodosPage({ token }) {
                 },
                 body: JSON.stringify({
                     isCompleted: true,
-                    createdAt: originalTodo.createdAt
+                    createdTime: originalTodo.createdTime
                 }),
                 credentials: 'include'
             })
@@ -130,7 +130,7 @@ function TodosPage({ token }) {
                 body: JSON.stringify({
                     title: editedTodo.title,
                     isCompleted: editedTodo.isCompleted,
-                    createdAt: editedTodo.createdAt
+                    createdTime: editedTodo.createdTime
                 }),
                 credentials: 'include'
             })

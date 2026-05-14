@@ -21,7 +21,7 @@ function Logon({ onSetEmail, onSetToken }) {
                 onSetEmail(data.name);
                 onSetToken(data.csrfToken);
             } else {
-                setAuthError(`Authenticatuin failed: ${data?.message}`);
+                setAuthError(`Authentication failed: ${data?.message}`);
             }
         } catch (error) {
             setAuthError(`Error: ${error.name} | ${error.message}`);

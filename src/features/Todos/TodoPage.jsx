@@ -8,7 +8,7 @@ function TodosPage({ token }) {
     const [isTodoListLoading, setIsTodoListLoading] = useState(false);
   
     useEffect(() => {
-        async function fetchTodos(event) {
+        async function fetchTodos() {
             setIsTodoListLoading(true);
             try {
                 const response = await fetch('/api/tasks', {
@@ -72,15 +72,42 @@ function TodosPage({ token }) {
                 previous.filter((todo) => todo.id !== tempId)
             );
         }
-    };
+    }
 
-    function completeTodo(id) {
+    async function completeTodo(id) {
+        const originalTodo = todoList.find((todo) => todo.id === id);
+
         const updatedTodoList = todoList.map(todo => (
         todo.id === id ? 
             todo = {...todo, isCompleted: true} :
             todo
         ))
         setTodoList(updatedTodoList);
+
+        try {
+            const response = fetch('/api/tasks/${id}', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': token,
+                },
+                body: JSON.stringify({
+                    isCompleted: true,
+                    createdAt: originalTodo.createdAt
+                }),
+                credentials: 'include'
+            })
+            if (!response.ok) {
+                throw new Error(response.message || 'Failed to complete todo');
+            }
+        } catch (error) {
+            setError(
+                `Error completing todo: ${originalTodo.title} | Error message: ${error.message}`
+            );
+            setTodoList((previous) =>
+                previous.map((todo) => (todo.id === id ? originalTodo : todo))
+            );
+        }
     }
 
     function updateTodo(editedTodo) {

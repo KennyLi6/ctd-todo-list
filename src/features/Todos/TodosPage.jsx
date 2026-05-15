@@ -85,7 +85,7 @@ function TodosPage({ token }) {
         setTodoList(updatedTodoList);
 
         try {
-            const response = fetch('/api/tasks/${id}', {
+            const response = await fetch(`/api/tasks/${id}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',

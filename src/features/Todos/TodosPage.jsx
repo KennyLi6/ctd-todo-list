@@ -93,7 +93,6 @@ function TodosPage({ token }) {
                 },
                 body: JSON.stringify({
                     isCompleted: true,
-                    createdAt: originalTodo.createdTime
                 }),
                 credentials: 'include'
             })
@@ -130,7 +129,6 @@ function TodosPage({ token }) {
                 body: JSON.stringify({
                     title: editedTodo.title,
                     isCompleted: editedTodo.isCompleted,
-                    createdAt: editedTodo.createdTime
                 }),
                 credentials: 'include'
             })

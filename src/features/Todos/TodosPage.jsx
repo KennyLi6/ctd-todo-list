@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import TodoList from './TodoList/TodoList'
 import TodoForm from './TodoForm'
 import SortBy from '../../shared/SortBy'
+import useDebounce from '../../utils/useDebounce'
+import FilterInput from '../../shared/FilterInput'
 
 function TodosPage({ token }) {
     const [todoList, setTodoList] = useState([])
@@ -9,6 +11,8 @@ function TodosPage({ token }) {
     const [isTodoListLoading, setIsTodoListLoading] = useState(false);
     const [sortBy, setSortBy] = useState('creationDate');
     const [sortDirection, setSortDirection] = useState('desc');
+    const [filterTerm, setFilterTerm] = useState('');
+    const debouncedFitlerTerm = useDebounce(filterTerm, 300);
   
     useEffect(() => {
         async function fetchTodos() {
@@ -20,10 +24,14 @@ function TodosPage({ token }) {
                     headers: { 'X-CSRF-TOKEN': token },
                     credentials: 'include'
                 };
-                const params = new URLSearchParams({
+                const paramsObject = {
                     sortBy,
-                    sortDirection
-                });
+                    sortDirection}
+                if (debouncedFitlerTerm) {
+                    paramsObject.find = debouncedFitlerTerm;
+                }
+                const params = new URLSearchParams(paramsObject);
+                
                 const response = await fetch(`/api/tasks?${params}`, options);
                 if (response.status === 401) {
                     throw new Error(`Unauthorized`);
@@ -40,7 +48,7 @@ function TodosPage({ token }) {
             }
         }
         if (token) {fetchTodos();}
-    }, [token, sortBy, sortDirection]);
+    }, [token, sortBy, sortDirection, debouncedFitlerTerm]);
 
     async function addTodo(todoTitle) {
         const tempId = Date.now();
@@ -159,6 +167,8 @@ function TodosPage({ token }) {
         }
     }
 
+    const handleFilterChange = (newTerm) => { setFilterTerm(newTerm); };
+
     return (
         <div>
             {error && (
@@ -173,6 +183,10 @@ function TodosPage({ token }) {
                 sortDirection={sortDirection}
                 onSortByChange={setSortBy}
                 onSortDirectionChange={setSortDirection}
+            />
+            <FilterInput 
+                filterTerm={filterTerm}
+                onFilterChange={setFilterTerm}
             />
             <TodoForm onAddTodo={addTodo}/>
             <TodoList 

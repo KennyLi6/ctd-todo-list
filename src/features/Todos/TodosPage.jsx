@@ -14,6 +14,7 @@ function TodosPage({ token }) {
     const [filterTerm, setFilterTerm] = useState('');
     const debouncedFitlerTerm = useDebounce(filterTerm, 300);
     const [dataVersion, setDataVersion] = useState(0);
+    const [filterError, setFilterError] = useState('');
   
     useEffect(() => {
         async function fetchTodos() {
@@ -42,8 +43,13 @@ function TodosPage({ token }) {
                 }
                 const data = await response.json();
                 setTodoList(data.tasks);
+                setFilterError('');
             } catch (error) {
-                setError(`Error: ${error.name} | ${error.message}`);
+                if (debouncedFitlerTerm || sortBy !== 'creationDate' || sortDirection !== 'desc') {
+                    setFilterError(`Error filtering/sorting todos: ${error.message}`);
+                } else {
+                    setError(`Error fetching todos: ${error.message}`);
+                }
             } finally {
                 setIsTodoListLoading(false);
             }
@@ -184,6 +190,17 @@ function TodosPage({ token }) {
                 <div>
                     <p>{error}</p>
                     <button onClick={() => setError('')}>Clear Error</button>
+                </div>
+            )}
+            {filterError && (
+                <div>
+                    <p>{filterError}</p>
+                    <button onClick={() => {
+                        setFilterTerm('');
+                        setSortBy('creationDate');
+                        setSortDirection('desc');
+                        setFilterError('');
+                    }}>Reset Filters</button>
                 </div>
             )}
             {isTodoListLoading && <div>Loading todos...</div>}

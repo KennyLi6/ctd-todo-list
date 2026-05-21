@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import TodoList from './TodoList/TodoList'
 import TodoForm from './TodoForm'
+import SortBy from '../../shared/SortBy'
 
 function TodosPage({ token }) {
     const [todoList, setTodoList] = useState([])
@@ -167,6 +168,12 @@ function TodosPage({ token }) {
                 </div>
             )}
             {isTodoListLoading && <div>Loading todos...</div>}
+            <SortBy 
+                sortBy={sortBy} 
+                sortDirection={sortDirection}
+                onSortByChange={setSortBy}
+                onSortDirectionChange={setSortDirection}
+            />
             <TodoForm onAddTodo={addTodo}/>
             <TodoList 
                 todoList={todoList} 

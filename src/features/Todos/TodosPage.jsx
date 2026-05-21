@@ -6,16 +6,24 @@ function TodosPage({ token }) {
     const [todoList, setTodoList] = useState([])
     const [error, setError] = useState("");
     const [isTodoListLoading, setIsTodoListLoading] = useState(false);
+    const [sortBy, setSortBy] = useState('creationDate');
+    const [sortDirection, setSortDirection] = useState('desc');
   
     useEffect(() => {
         async function fetchTodos() {
             setIsTodoListLoading(true);
+            
             try {
-                const response = await fetch('/api/tasks', {
+                const options = {
                     method: 'GET',
                     headers: { 'X-CSRF-TOKEN': token },
                     credentials: 'include'
-                })
+                };
+                const params = new URLSearchParams({
+                    sortBy,
+                    sortDirection
+                });
+                const response = await fetch(`/api/tasks?${params}`, options);
                 if (response.status === 401) {
                     throw new Error(`Unauthorized`);
                 }
@@ -31,7 +39,7 @@ function TodosPage({ token }) {
             }
         }
         if (token) {fetchTodos();}
-    }, [token]);
+    }, [token, sortBy, sortDirection]);
 
     async function addTodo(todoTitle) {
         const tempId = Date.now();
@@ -44,7 +52,7 @@ function TodosPage({ token }) {
         setTodoList(previous => [newTodo, ...previous])
 
         try {
-            const response = await fetch('/api/tasks', {
+            const options = {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -55,7 +63,8 @@ function TodosPage({ token }) {
                     isCompleted: newTodo.isCompleted,
                 }),
                 credentials: 'include'
-            });
+            };
+            const response = await fetch('/api/tasks', options);
             if (!response.ok) {
                 throw new Error(response.message || 'Failed to add todo');
             }
@@ -85,7 +94,7 @@ function TodosPage({ token }) {
         setTodoList(updatedTodoList);
 
         try {
-            const response = await fetch(`/api/tasks/${id}`, {
+            const options = {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -95,7 +104,8 @@ function TodosPage({ token }) {
                     isCompleted: true,
                 }),
                 credentials: 'include'
-            })
+            };
+            const response = await fetch(`/api/tasks/${id}`, options);
             if (!response.ok) {
                 throw new Error(response.message || 'Failed to complete todo');
             }
@@ -120,7 +130,7 @@ function TodosPage({ token }) {
         setTodoList(updatedTodos)
 
         try {
-            const response = await fetch(`/api/tasks/${editedTodo.id}`, {
+            const options = {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -131,7 +141,8 @@ function TodosPage({ token }) {
                     isCompleted: editedTodo.isCompleted,
                 }),
                 credentials: 'include'
-            })
+            };
+            const response = await fetch(`/api/tasks/${editedTodo.id}`, options);
             if (!response.ok) {
                 throw new Error (response.message || 'Failed to update todo');
             }

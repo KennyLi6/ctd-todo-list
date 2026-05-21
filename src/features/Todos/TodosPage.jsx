@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import TodoList from './TodoList/TodoList'
 import TodoForm from './TodoForm'
 import SortBy from '../../shared/SortBy'
@@ -13,6 +13,7 @@ function TodosPage({ token }) {
     const [sortDirection, setSortDirection] = useState('desc');
     const [filterTerm, setFilterTerm] = useState('');
     const debouncedFitlerTerm = useDebounce(filterTerm, 300);
+    const [dataVersion, setDataVersion] = useState(0);
   
     useEffect(() => {
         async function fetchTodos() {
@@ -82,6 +83,7 @@ function TodosPage({ token }) {
             setTodoList((previous) =>
                 previous.map((todo) => (todo.id === tempId ? savedTodo : todo))
             );
+            invalidateCache();
         } catch (error) {
             setError(
                 `Error adding todo: ${newTodo.title} | Error message: ${error.message}`
@@ -118,6 +120,7 @@ function TodosPage({ token }) {
             if (!response.ok) {
                 throw new Error(response.message || 'Failed to complete todo');
             }
+            invalidateCache();
         } catch (error) {
             setError(
                 `Error completing todo: ${originalTodo.title} | Error message: ${error.message}`
@@ -155,6 +158,7 @@ function TodosPage({ token }) {
             if (!response.ok) {
                 throw new Error (response.message || 'Failed to update todo');
             }
+            invalidateCache();
         } catch (error) {
             setError(
                 `Error updating todo: ${editedTodo.title} | Error message: ${error.message}`
@@ -168,6 +172,11 @@ function TodosPage({ token }) {
     }
 
     const handleFilterChange = (newTerm) => { setFilterTerm(newTerm); };
+
+    const invalidateCache = useCallback(() => {
+        console.log('Invalidating memo cache after todo mutation');
+        setDataVersion((previous) => previous + 1);
+    }, [])
 
     return (
         <div>
@@ -186,7 +195,7 @@ function TodosPage({ token }) {
             />
             <FilterInput 
                 filterTerm={filterTerm}
-                onFilterChange={setFilterTerm}
+                onFilterChange={handleFilterChange}
             />
             <TodoForm onAddTodo={addTodo}/>
             <TodoList 

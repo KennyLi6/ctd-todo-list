@@ -193,6 +193,7 @@ function TodosPage({ token }) {
             )}
             {filterError && (
                 <div>
+                    <button onClick={() => setFilterError('')}>Clear Filter Error</button>
                     <p>{filterError}</p>
                     <button onClick={() => {
                         setFilterTerm('');

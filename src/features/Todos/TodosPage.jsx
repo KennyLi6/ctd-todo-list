@@ -12,7 +12,7 @@ function TodosPage({ token }) {
     const [sortBy, setSortBy] = useState('creationDate');
     const [sortDirection, setSortDirection] = useState('desc');
     const [filterTerm, setFilterTerm] = useState('');
-    const debouncedFitlerTerm = useDebounce(filterTerm, 300);
+    const debouncedFilterTerm = useDebounce(filterTerm, 300);
     const [dataVersion, setDataVersion] = useState(0);
     const [filterError, setFilterError] = useState('');
   
@@ -29,8 +29,8 @@ function TodosPage({ token }) {
                 const paramsObject = {
                     sortBy,
                     sortDirection}
-                if (debouncedFitlerTerm) {
-                    paramsObject.find = debouncedFitlerTerm;
+                if (debouncedFilterTerm) {
+                    paramsObject.find = debouncedFilterTerm;
                 }
                 const params = new URLSearchParams(paramsObject);
                 
@@ -45,7 +45,7 @@ function TodosPage({ token }) {
                 setTodoList(data.tasks);
                 setFilterError('');
             } catch (error) {
-                if (debouncedFitlerTerm || sortBy !== 'creationDate' || sortDirection !== 'desc') {
+                if (debouncedFilterTerm || sortBy !== 'creationDate' || sortDirection !== 'desc') {
                     setFilterError(`Error filtering/sorting todos: ${error.message}`);
                 } else {
                     setError(`Error fetching todos: ${error.message}`);
@@ -55,7 +55,7 @@ function TodosPage({ token }) {
             }
         }
         if (token) {fetchTodos();}
-    }, [token, sortBy, sortDirection, debouncedFitlerTerm]);
+    }, [token, sortBy, sortDirection, debouncedFilterTerm]);
 
     async function addTodo(todoTitle) {
         const tempId = Date.now();

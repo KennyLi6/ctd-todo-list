@@ -31,3 +31,10 @@ export const initialTodoState = {
     filterTerm: '',
     dataVersion: 0,
 };
+
+export function todoReducer(state, action) {
+    switch (action.type) {
+        default:
+            throw new Error(`Unknown action type: ${action.type}`)
+    }
+}

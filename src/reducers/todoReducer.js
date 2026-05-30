@@ -36,5 +36,101 @@ export function todoReducer(state, action) {
     switch (action.type) {
         default:
             throw new Error(`Unknown action type: ${action.type}`)
+        case TODO_ACTIONS.FETCH_START:
+            return {
+                ...state,
+                isTodoListLoading: true,
+                error: '',
+                filterError: '',
+            };
+        case TODO_ACTIONS.FETCH_SUCCESS:
+            return {
+                ...state,
+                isTodoListLoading: false,
+                todoList: action.payload.todoList,
+            };
+        case TODO_ACTIONS.FETCH_ERROR:
+            return {
+                ...state,
+                isTodoListLoading: false,
+                error: action.payload.error,
+                filterError: action.payload.filterError,
+            };
+        case TODO_ACTIONS.ADD_TODO_START:
+            return {
+                ...state,
+                todoList: action.payload.todoList,
+                error: '',
+            }
+        case TODO_ACTIONS.ADD_TODO_SUCCESS:
+            return {
+                ...state,
+                todoList: action.payload.todoList,
+                dataVersion: action.payload.dataVersion,
+            };
+        case TODO_ACTIONS.ADD_TODO_ERROR:
+            return {
+                ...state,
+                todoList: action.payload.todoList,
+                error: action.payload.error,
+            };
+        case TODO_ACTIONS.COMPLETE_TODO_START:
+            return {
+                ...state,
+                todoList: action.payload.todoList,
+                error: '',
+            };
+        case TODO_ACTIONS.COMPLETE_TODO_SUCCESS:
+            return {
+                ...state,
+                dataVersion: action.payload.dataVersion,
+            };
+        case TODO_ACTIONS.COMPLETE_TODO_ERROR:
+            return {
+                ...state,
+                todoList: action.payload.todoList,
+                error: action.payload.error,
+            };
+        case TODO_ACTIONS.UPDATE_TODO_START:
+            return {
+                ...state,
+                todoList: action.payload.todoList,
+                error: '',
+            };
+        case TODO_ACTIONS.UPDATE_TODO_SUCCESS:
+            return {
+                ...state,
+                dataVersion: action.payload.dataVersion,
+            };
+        case TODO_ACTIONS.UPDATE_TODO_ERROR:
+            return {
+                ...state,
+                todoList: action.payload.todoList,
+                error: action.payload.error,
+            };
+        case TODO_ACTIONS.SET_SORT:
+            return {
+                ...state,
+                sortBy: action.payload.sortBy,
+                sortDirection: action.payload.sortDirection,
+            };
+        case TODO_ACTIONS.SET_FILTER:
+            return {
+                ...state,
+                filterTerm: action.payload.filterTerm,
+            };
+        case TODO_ACTIONS.CLEAR_ERROR:
+            return {
+                ...state,
+                error: '',
+            };
+        case TODO_ACTIONS.RESET_FILTERS:
+            return {
+                ...state,
+                filterTerm: '',
+                sortBy: 'creationDate',
+                sortDirection: 'desc',
+                filterError: '',
+            };
     }
 }

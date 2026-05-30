@@ -18,6 +18,7 @@ export const TODO_ACTIONS = {
     SET_SORT: 'SET_SORT',
     SET_FILTER: 'SET_FILTER',
     CLEAR_ERROR: 'CLEAR_ERROR',
+    CLEAR_FILTER_ERROR: 'CLEAR_FILTER_ERROR',
     RESET_FILTERS: 'RESET_FILTERS',
 };
 
@@ -124,6 +125,11 @@ export function todoReducer(state, action) {
                 ...state,
                 error: '',
             };
+        case TODO_ACTIONS.CLEAR_FILTER_ERROR:
+            return {
+                ...state,
+                filterError: '',
+            }
         case TODO_ACTIONS.RESET_FILTERS:
             return {
                 ...state,

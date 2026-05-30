@@ -6,12 +6,12 @@ import useDebounce from '../../utils/useDebounce'
 import FilterInput from '../../shared/FilterInput'
 import {
     todoReducer,
-    initalTodoState,
+    initialTodoState,
     TODO_ACTIONS,
 } from '../../reducers/todoReducer'
 
 function TodosPage({ token }) {
-    const [state, dispatch] = useReducer(todoReducer, initalTodoState);
+    const [state, dispatch] = useReducer(todoReducer, initialTodoState);
     const {
         todoList,
         error,

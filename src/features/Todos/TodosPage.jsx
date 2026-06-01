@@ -202,7 +202,7 @@ function TodosPage({ token }) {
     }
 
     const invalidateCache = useCallback(() => {
-        dispatch({ type: TODO_ACTIONS.INVALIDATE_CACHE })
+        dispatch({ type: TODO_ACTIONS.INVALIDATE_CACHE });
     }, []);
 
     return (

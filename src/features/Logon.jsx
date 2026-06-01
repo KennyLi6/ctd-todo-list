@@ -10,12 +10,13 @@ function Logon({ onSetEmail, onSetToken }) {
         event.preventDefault();
         setIsLoggingOn(true);
         try {
-            const response = await fetch('/api/users/logon', {
+            const options = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
                 body: JSON.stringify({ email, password })
-            });
+            };
+            const response = await fetch('/api/users/logon', options);
             const data = await response.json();
             if (response.status === 200 && data.name && data.csrfToken) {
                 onSetEmail(data.name);

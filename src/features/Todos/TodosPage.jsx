@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from 'react'
+import { useCallback, useEffect, useReducer } from 'react'
 import TodoList from './TodoList/TodoList'
 import TodoForm from './TodoForm'
 import SortBy from '../../shared/SortBy'
@@ -105,6 +105,7 @@ function TodosPage({ token }) {
                 type: TODO_ACTIONS.ADD_TODO_SUCCESS,
                 payload: { tempId, savedTodo },
             });
+            invalidateCache();
         } catch (error) {
             dispatch({
                 type: TODO_ACTIONS.ADD_TODO_ERROR,
@@ -140,7 +141,8 @@ function TodosPage({ token }) {
             if (!response.ok) {
                 throw new Error(response.message || 'Failed to complete todo');
             }
-            dispatch({ type: TODO_ACTIONS.COMPLETE_TODO_SUCCESS })
+            dispatch({ type: TODO_ACTIONS.COMPLETE_TODO_SUCCESS });
+            invalidateCache();
         } catch (error) {
             dispatch({
                 type: TODO_ACTIONS.COMPLETE_TODO_ERROR,
@@ -178,7 +180,8 @@ function TodosPage({ token }) {
             if (!response.ok) {
                 throw new Error (response.message || 'Failed to update todo');
             }
-            dispatch({ type: TODO_ACTIONS.UPDATE_TODO_SUCCESS })
+            dispatch({ type: TODO_ACTIONS.UPDATE_TODO_SUCCESS });
+            invalidateCache();
         } catch (error) {
             dispatch({
                 type: TODO_ACTIONS.UPDATE_TODO_ERROR,
@@ -197,6 +200,10 @@ function TodosPage({ token }) {
             payload: { filterTerm: newTerm },
         });
     }
+
+    const invalidateCache = useCallback(() => {
+        dispatch({ type: TODO_ACTIONS.INVALIDATE_CACHE })
+    }, []);
 
     return (
         <div>

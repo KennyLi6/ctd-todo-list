@@ -5,7 +5,7 @@ import Header from './shared/Header'
 import { useAuth } from './contexts/AuthContext';
 
 function App() {
-  const isAuthenticated = useAuth();
+  const { isAuthenticated } = useAuth();
 
   return (
     <>

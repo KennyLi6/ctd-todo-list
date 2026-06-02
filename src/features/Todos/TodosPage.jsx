@@ -224,6 +224,8 @@ function TodosPage() {
             )}
             {isTodoListLoading && <div>Loading todos...</div>}
             <SortBy 
+                sortBy={sortBy}
+                sortDirection={sortDirection}
                 onSortByChange={(newSortBy) => {
                     dispatch({
                         type: TODO_ACTIONS.SET_SORT,

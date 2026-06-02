@@ -154,8 +154,8 @@ export function todoReducer(state, action) {
             return {
                 ...state,
                 filterTerm: '',
-                sortBy: 'creationDate',
-                sortDirection: 'desc',
+                sortBy: 'createdDate',
+                sortDirection: 'asc',
                 filterError: '',
             };
         case TODO_ACTIONS.INVALIDATE_CACHE:

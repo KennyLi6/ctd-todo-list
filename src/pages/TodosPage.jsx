@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useReducer } from 'react'
-import TodoList from './TodoList/TodoList'
-import TodoForm from './TodoForm'
-import SortBy from '../../shared/SortBy'
-import useDebounce from '../../utils/useDebounce'
-import FilterInput from '../../shared/FilterInput'
+import { useCallback, useEffect, useReducer } from 'react';
+import TodoList from '../features/Todos/TodoList/TodoList';
+import TodoForm from '../features/Todos/TodoForm'
+import SortBy from '../shared/SortBy'
+import useDebounce from '../utils/useDebounce'
+import FilterInput from '../shared/FilterInput'
 import {
     todoReducer,
     initialTodoState,

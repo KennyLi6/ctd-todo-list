@@ -8,8 +8,8 @@ import {
     todoReducer,
     initialTodoState,
     TODO_ACTIONS,
-} from '../../reducers/todoReducer'
-import { useAuth } from '../../contexts/AuthContext'
+} from '../reducers/todoReducer'
+import { useAuth } from '../contexts/AuthContext'
 
 function TodosPage() {
     const { token } = useAuth();

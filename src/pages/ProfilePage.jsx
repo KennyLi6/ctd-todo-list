@@ -21,9 +21,7 @@ function ProfilePage() {
 
                 const options = {
                     method: 'GET',
-                    headers: {
-                        'X-CSRF-TOKEN': token,
-                    },
+                    headers: { 'X-CSRF-TOKEN': token },
                     credentials: 'include',
                 };
 
@@ -38,9 +36,8 @@ function ProfilePage() {
                 }
 
                 const todos = await resp.json();
-
-                const total = todos.length;
-                const completed = todos.filter((todo) => todo.isCompleted).length;
+                const total = todos.tasks.length;
+                const completed = todos.tasks.filter((todo) => todo.isCompleted).length;
                 const active = total - completed;
 
                 setTodoStats({ total, completed, active });

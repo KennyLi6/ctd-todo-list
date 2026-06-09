@@ -29,8 +29,8 @@ export const initialTodoState = {
     error: '',
     filterError: '',
     isTodoListLoading: true,
-    sortBy: 'createdDate',
-    sortDirection: 'asc',
+    sortBy: 'creationDate',
+    sortDirection: 'desc',
     filterTerm: '',
     dataVersion: 0,
 };
@@ -154,8 +154,8 @@ export function todoReducer(state, action) {
             return {
                 ...state,
                 filterTerm: '',
-                sortBy: 'createdDate',
-                sortDirection: 'asc',
+                sortBy: 'creationDate',
+                sortDirection: 'desc',
                 filterError: '',
             };
         case TODO_ACTIONS.INVALIDATE_CACHE:

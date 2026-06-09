@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 
 function ProfilePage() {
-    const { name, token } = useAuth();
+    const { email, token } = useAuth();
     const [todoStats, setTodoStats] = useState({
         total: 0,
         completed: 0,
@@ -58,7 +58,7 @@ function ProfilePage() {
             <div>
                 <h3>Account Information</h3>
                 <p>
-                    <strong>Name:</strong> {name}
+                    <strong>Name:</strong> {email}
                 </p>
                 <p>
                     <strong>Account Status:</strong> Active

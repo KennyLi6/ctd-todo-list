@@ -1,24 +1,34 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useReducer } from 'react'
 import TodoList from './TodoList/TodoList'
 import TodoForm from './TodoForm'
 import SortBy from '../../shared/SortBy'
 import useDebounce from '../../utils/useDebounce'
 import FilterInput from '../../shared/FilterInput'
+import {
+    todoReducer,
+    initialTodoState,
+    TODO_ACTIONS,
+} from '../../reducers/todoReducer'
+import { useAuth } from '../../contexts/AuthContext'
 
-function TodosPage({ token }) {
-    const [todoList, setTodoList] = useState([])
-    const [error, setError] = useState("");
-    const [isTodoListLoading, setIsTodoListLoading] = useState(false);
-    const [sortBy, setSortBy] = useState('creationDate');
-    const [sortDirection, setSortDirection] = useState('desc');
-    const [filterTerm, setFilterTerm] = useState('');
+function TodosPage() {
+    const { token } = useAuth();
+    const [state, dispatch] = useReducer(todoReducer, initialTodoState);
+    const {
+        todoList,
+        error,
+        filterError,
+        isTodoListLoading,
+        sortBy,
+        sortDirection,
+        filterTerm,
+        dataVersion,
+    } = state;
     const debouncedFilterTerm = useDebounce(filterTerm, 300);
-    const [dataVersion, setDataVersion] = useState(0);
-    const [filterError, setFilterError] = useState('');
   
     useEffect(() => {
         async function fetchTodos() {
-            setIsTodoListLoading(true);
+            dispatch({ type: TODO_ACTIONS.FETCH_START });
             
             try {
                 const options = {
@@ -41,21 +51,25 @@ function TodosPage({ token }) {
                 if (!response.ok) {
                     throw new Error(response.message || `Failed to fetch todos`);
                 }
-                const data = await response.json();
-                setTodoList(data.tasks);
-                setFilterError('');
+                const todos = await response.json();
+                dispatch({ 
+                    type: TODO_ACTIONS.FETCH_SUCCESS,
+                    payload: { todoList: todos.tasks }
+                });
             } catch (error) {
-                if (debouncedFilterTerm || sortBy !== 'creationDate' || sortDirection !== 'desc') {
-                    setFilterError(`Error filtering/sorting todos: ${error.message}`);
-                } else {
-                    setError(`Error fetching todos: ${error.message}`);
-                }
-            } finally {
-                setIsTodoListLoading(false);
+                const isFilterError = debouncedFilterTerm || sortBy !== 'creationDate' || sortDirection !== 'desc';
+                dispatch({ 
+                    type: TODO_ACTIONS.FETCH_ERROR,
+                    payload: { message: isFilterError 
+                        ? `Error filtering/sorting todos: ${error.message}`
+                        : `Error fetching todos: ${error.message}`,
+                        isFilterError,
+                    },
+                });
             }
         }
-        if (token) {fetchTodos();}
-    }, [token, sortBy, sortDirection, debouncedFilterTerm]);
+        if (token) { fetchTodos(); }
+    }, [token, sortBy, sortDirection, debouncedFilterTerm, dataVersion]);
 
     async function addTodo(todoTitle) {
         const tempId = Date.now();
@@ -65,7 +79,10 @@ function TodosPage({ token }) {
             isCompleted: false
         }
 
-        setTodoList(previous => [newTodo, ...previous])
+        dispatch({
+            type: TODO_ACTIONS.ADD_TODO_START,
+            payload: { tempTodo: newTodo },
+        });
 
         try {
             const options = {
@@ -86,29 +103,29 @@ function TodosPage({ token }) {
             }
             const savedTodo = await response.json();
 
-            setTodoList((previous) =>
-                previous.map((todo) => (todo.id === tempId ? savedTodo : todo))
-            );
+            dispatch({
+                type: TODO_ACTIONS.ADD_TODO_SUCCESS,
+                payload: { tempId, savedTodo },
+            });
             invalidateCache();
         } catch (error) {
-            setError(
-                `Error adding todo: ${newTodo.title} | Error message: ${error.message}`
-            );
-            setTodoList((previous) =>
-                previous.filter((todo) => todo.id !== tempId)
-            );
+            dispatch({
+                type: TODO_ACTIONS.ADD_TODO_ERROR,
+                payload: {
+                    tempId,
+                    error: `Error adding todo: ${newTodo.title} | Error message: ${error.message}`,
+                },
+            });
         }
     }
 
     async function completeTodo(id) {
         const originalTodo = todoList.find((todo) => todo.id === id);
         
-        const updatedTodoList = todoList.map(todo => (
-        todo.id === id ? 
-            todo = {...todo, isCompleted: true} :
-            todo
-        ))
-        setTodoList(updatedTodoList);
+        dispatch({
+            type: TODO_ACTIONS.COMPLETE_TODO_START,
+            payload: { id },
+        });
 
         try {
             const options = {
@@ -126,26 +143,27 @@ function TodosPage({ token }) {
             if (!response.ok) {
                 throw new Error(response.message || 'Failed to complete todo');
             }
+            dispatch({ type: TODO_ACTIONS.COMPLETE_TODO_SUCCESS });
             invalidateCache();
         } catch (error) {
-            setError(
-                `Error completing todo: ${originalTodo.title} | Error message: ${error.message}`
-            );
-            setTodoList((previous) =>
-                previous.map((todo) => (todo.id === id ? originalTodo : todo))
-            );
+            dispatch({
+                type: TODO_ACTIONS.COMPLETE_TODO_ERROR,
+                payload: {
+                    id,
+                    originalTodo,
+                    error: `Error completing todo: ${originalTodo.title} | Error message: ${error.message}`,
+                },
+            });
         }
     }
 
     async function updateTodo(editedTodo) {
         const originalTodo = todoList.find((todo) => (todo.id === editedTodo.id));
 
-        const updatedTodos = todoList.map(todo => (
-        todo.id === editedTodo.id ? 
-            {...editedTodo} :
-            todo
-        ))
-        setTodoList(updatedTodos)
+        dispatch({
+            type: TODO_ACTIONS.UPDATE_TODO_START,
+            payload: { editedTodo },
+        });
 
         try {
             const options = {
@@ -164,51 +182,62 @@ function TodosPage({ token }) {
             if (!response.ok) {
                 throw new Error (response.message || 'Failed to update todo');
             }
+            dispatch({ type: TODO_ACTIONS.UPDATE_TODO_SUCCESS });
             invalidateCache();
         } catch (error) {
-            setError(
-                `Error updating todo: ${editedTodo.title} | Error message: ${error.message}`
-            );
-            setTodoList((previous) => 
-                previous.map((todo) =>
-                    todo.id === editedTodo.id? originalTodo : todo
-                )
-            );
+            dispatch({
+                type: TODO_ACTIONS.UPDATE_TODO_ERROR,
+                payload: {
+                    id: editedTodo.id,
+                    originalTodo,
+                    error: `Error updating todo: ${editedTodo.title} | Error message: ${error.message}`,
+                },
+            });
         }
     }
 
-    const handleFilterChange = (newTerm) => { setFilterTerm(newTerm); };
+    const handleFilterChange = (newTerm) => { 
+        dispatch({ 
+            type: TODO_ACTIONS.SET_FILTER,
+            payload: { filterTerm: newTerm },
+        });
+    }
 
     const invalidateCache = useCallback(() => {
-        setDataVersion((previous) => previous + 1);
-    }, [])
+        dispatch({ type: TODO_ACTIONS.INVALIDATE_CACHE });
+    }, []);
 
     return (
         <div>
             {error && (
                 <div>
                     <p>{error}</p>
-                    <button onClick={() => setError('')}>Clear Error</button>
+                    <button onClick={() => dispatch({ type: TODO_ACTIONS.CLEAR_ERROR })}>Clear Error</button>
                 </div>
             )}
             {filterError && (
                 <div>
-                    <button onClick={() => setFilterError('')}>Clear Filter Error</button>
+                    <button onClick={() => dispatch({ type: TODO_ACTIONS.CLEAR_FILTER_ERROR })}>Clear Filter Error</button>
                     <p>{filterError}</p>
-                    <button onClick={() => {
-                        setFilterTerm('');
-                        setSortBy('creationDate');
-                        setSortDirection('desc');
-                        setFilterError('');
-                    }}>Reset Filters</button>
+                    <button onClick={() => dispatch({ type: TODO_ACTIONS.RESET_FILTERS })}>Reset Filters</button>
                 </div>
             )}
             {isTodoListLoading && <div>Loading todos...</div>}
             <SortBy 
-                sortBy={sortBy} 
+                sortBy={sortBy}
                 sortDirection={sortDirection}
-                onSortByChange={setSortBy}
-                onSortDirectionChange={setSortDirection}
+                onSortByChange={(newSortBy) => {
+                    dispatch({
+                        type: TODO_ACTIONS.SET_SORT,
+                        payload: { sortBy: newSortBy, sortDirection }
+                    })
+                }}
+                onSortDirectionChange={(newSortDirection) => {
+                    dispatch({
+                        type: TODO_ACTIONS.SET_SORT,
+                        payload: { sortBy, sortDirection: newSortDirection }
+                    })
+                }}
             />
             <FilterInput 
                 filterTerm={filterTerm}

@@ -2,6 +2,7 @@ import TextInputWithLabel from "../../../shared/TextInputWithLabel";
 import { isValidTodoTitle } from "../../../utils/todoValidation";
 import { useEditableTitle } from "../../../hooks/useEditableTitle"
 import { useRef } from "react";
+import { sanitizeInput } from "../../../utils/sanitize";
 
 function TodoListItem({ todo, onCompleteTodo, onUpdateTodo }) {
     const {
@@ -26,7 +27,8 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo }) {
         if (!isEditing) return;
         event.preventDefault();
         const finalTitle = finishEdit();
-        onUpdateTodo({ ...todo, title: finalTitle });
+        const sanitizedTitle = sanitizeInput(finalTitle);
+        onUpdateTodo({ ...todo, title: sanitizedTitle });
     }
     
     return (

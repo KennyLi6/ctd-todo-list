@@ -77,7 +77,7 @@ function TodosPage() {
             }
         }
         if (token) { fetchTodos(); }
-    }, [token, sortBy, sortDirection, debouncedFilterTerm]);
+    }, [token, sortBy, sortDirection, debouncedFilterTerm, dataVersion]);
 
     async function addTodo(todoTitle) {
         const tempId = Date.now();

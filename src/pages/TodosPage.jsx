@@ -42,7 +42,10 @@ function TodosPage() {
                 };
                 const paramsObject = {
                     sortBy,
-                    sortDirection}
+                    sortDirection,
+                    page: 0,
+                    limit: 99,
+                }
                 if (debouncedFilterTerm) {
                     paramsObject.find = debouncedFilterTerm;
                 }
@@ -56,6 +59,7 @@ function TodosPage() {
                     throw new Error(response.message || `Failed to fetch todos`);
                 }
                 const todos = await response.json();
+                console.log(todos.tasks)
                 dispatch({ 
                     type: TODO_ACTIONS.FETCH_SUCCESS,
                     payload: { todoList: todos.tasks }

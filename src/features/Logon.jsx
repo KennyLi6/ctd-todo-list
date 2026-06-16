@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import formStyles from "./Todos/TodoForm.module.css";
+import styles from "../pages/TodosPage.module.css"
 
 function Logon() {
     const { login } = useAuth();
@@ -48,11 +50,19 @@ function Logon() {
                     onChange={(event) => setPassword(event.target.value)}
                     required
                 />
-                <button disabled={isLoggingOn}>
+                <button 
+                    style={{gap: 140}}
+                    className={formStyles.submitButton}
+                    disabled={isLoggingOn}
+                >
                     {isLoggingOn ? <>Logging In...</> : <>Log On</>}
                 </button>
             </form>
-            { authError && <p>{authError}</p>}
+            { authError && (
+                <div className={styles.errorBox}>
+                    <p>{authError}</p>
+                </div>
+            )}
         </>
     )
 }

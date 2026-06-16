@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router";
+import styles from "./Todos/TodoForm.module.css"
 
 function Logoff() {
     const { logout } = useAuth();
@@ -24,7 +25,10 @@ function Logoff() {
 
     return (
         <>
-            <button onClick={handleLogoff} disabled={isLoggingOff}>
+            <button 
+                className={styles.submitButton}
+                onClick={handleLogoff} disabled={isLoggingOff}
+            >
                 {isLoggingOff ? <>Logging off...</> : <>Log Off</>}
             </button>
             {error && <p>{error}</p>}

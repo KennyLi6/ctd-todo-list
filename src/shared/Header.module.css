@@ -1,7 +1,7 @@
 .title {
     font-size: 2.4em;
-    font-weight: 800;
-    margin-bottom: 28px;
+    font-weight: 600;
+    margin-bottom: 4px;
     color: #000000;
 }
 
@@ -9,4 +9,8 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
+}
+
+.logoff {
+    margin-top: 16px;
 }

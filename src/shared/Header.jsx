@@ -12,7 +12,7 @@ function Header() {
                 <h1 className={styles.title}>Todo List</h1>
                 <Navigation/>
             </div>
-            {isAuthenticated && <Logoff/>}
+            {isAuthenticated && <div className={styles.logoff}><Logoff/></div>}
         </>
     )
 }

@@ -45,7 +45,7 @@ function TodosPage() {
                     sortBy,
                     sortDirection,
                     page: 0,
-                    limit: 99,
+                    limit: 99, //if limit default of 10, completed todos can block active todos
                 }
                 if (debouncedFilterTerm) {
                     paramsObject.find = debouncedFilterTerm;

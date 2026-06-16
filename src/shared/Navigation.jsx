@@ -7,6 +7,7 @@ function Navigation() {
     const navLinkStyle = ({ isActive }) => ({
         fontWeight: isActive ? 'bold' : 'normal',
         textDecoration: isActive ? 'underline' : 'none',
+        color: isActive ? '#3182ce' : '#000000'
     });
 
     return(

@@ -1,6 +1,8 @@
+import styles from "./TodosPage.module.css"
+
 function AboutPage() {
     return (
-        <div>
+        <div className={styles.container}>
             <h1>About Todo List</h1>
             <p>
                 This todo list application made in React allows for organizing

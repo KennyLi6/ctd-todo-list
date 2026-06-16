@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
+import styles from "./TodosPage.module.css"
 
 function LoginPage() {
     const { login, isAuthenticated } = useAuth();
@@ -41,29 +42,31 @@ function LoginPage() {
 
     return (
         <>
-            <form onSubmit={handleSubmit}>
-                <p>Log on to get started</p>
-                <label htmlFor="email">Email</label>
-                <input
-                    type="text"
-                    name="email"
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                    required
-                />
-                <label htmlFor="password">Password</label>
-                <input 
-                    type="password"
-                    name="password"
-                    value={password}
-                    onChange={(event) => setPassword(event.target.value)}
-                    required
-                />
-                <button disabled={isLoggingOn}>
-                    {isLoggingOn ? <>Logging In...</> : <>Log On</>}
-                </button>
-            </form>
-            { authError && <p>{authError}</p>}
+            <div className={styles.container}>
+                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                    <p>Log on to get started</p>
+                    <label htmlFor="email">Email</label>
+                    <input
+                        type="text"
+                        name="email"
+                        value={email}
+                        onChange={(event) => setEmail(event.target.value)}
+                        required
+                    />
+                    <label htmlFor="password">Password</label>
+                    <input 
+                        type="password"
+                        name="password"
+                        value={password}
+                        onChange={(event) => setPassword(event.target.value)}
+                        required
+                    />
+                    <button disabled={isLoggingOn}>
+                        {isLoggingOn ? <>Logging In...</> : <>Log On</>}
+                    </button>
+                </form>
+                { authError && <p>{authError}</p>}
+            </div>
         </>
     )
 }

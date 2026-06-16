@@ -12,6 +12,7 @@ import {
 import { useAuth } from '../contexts/AuthContext';
 import { useSearchParams } from 'react-router';
 import StatusFilter from '../shared/StatusFilter';
+import styles from "./TodosPage.module.css";
 
 function TodosPage() {
     const { token } = useAuth();
@@ -216,15 +217,15 @@ function TodosPage() {
     }, []);
 
     return (
-        <div>
+        <div className={styles.container}>
             {error && (
-                <div>
+                <div className={styles.errorBox}>
                     <p>{error}</p>
                     <button onClick={() => dispatch({ type: TODO_ACTIONS.CLEAR_ERROR })}>Clear Error</button>
                 </div>
             )}
             {filterError && (
-                <div>
+                <div className={styles.filterErrorBox}>
                     <button onClick={() => dispatch({ type: TODO_ACTIONS.CLEAR_FILTER_ERROR })}>Clear Filter Error</button>
                     <p>{filterError}</p>
                     <button onClick={() => dispatch({ type: TODO_ACTIONS.RESET_FILTERS })}>Reset Filters</button>

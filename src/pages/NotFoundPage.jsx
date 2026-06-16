@@ -1,8 +1,9 @@
 import { Link } from "react-router";
+import styles from "./TodosPage.module.css"
 
 function NotFoundPage() {
     return (
-        <div>
+        <div className={styles.container}>
             <h2>404 - Page Not Found</h2>
             <p>The page you're looking for doesn't exist.</p>
 

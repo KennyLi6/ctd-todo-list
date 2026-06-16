@@ -1,0 +1,48 @@
+.container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 32px;
+    background-color: #808db1;
+    border-radius: 16px;
+    box-shadow: 0 5px 15px #4c5863;
+    color: #000000;
+    box-sizing: border-box;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background-color: #f7fafc;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-sizing: border-box;
+}
+
+.errorBox, .filterErrorBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 14px 18px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-bottom: 16px;
+  animation: slideIn 0.3s ease;
+  box-sizing: border-box;
+}
+
+.errorBox {
+  color: #c53030;
+  background-color: #fff5f5;
+  border: 1px solid #feb2b2;
+}
+
+.filterErrorBox {
+  color: #dd6b20;
+  background-color: #fffaf0;
+  border: 1px solid #fbd38d;
+}

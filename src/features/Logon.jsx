@@ -9,6 +9,7 @@ function Logon() {
     const [password, setPassword] = useState("");
     const [authError, setAuthError] = useState("");
     const [isLoggingOn, setIsLoggingOn] = useState(false);
+    
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -41,6 +42,7 @@ function Logon() {
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
                     required
+                    maxLength={80}
                 />
                 <label htmlFor="password">Password</label>
                 <input 
@@ -49,6 +51,7 @@ function Logon() {
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
                     required
+                    maxLength={80}
                 />
                 <button 
                     style={{gap: 140}}

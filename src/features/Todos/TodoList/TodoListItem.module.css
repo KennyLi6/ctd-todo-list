@@ -1,0 +1,118 @@
+.itemCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 8px 16px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.01);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.itemCard:hover {
+  border-color: #cbd5e0;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
+}
+
+.itemForm {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.viewContainer {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+  width: 100%;
+}
+
+.editWrapper {
+  flex: 1;
+  width: 100%;
+}
+
+/* Task text */
+.todoText {
+  font-size: 1.05rem;
+  cursor: pointer;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  transition: color 0.2s ease;
+  padding: 10px 0; /* Increase clickable area */
+  flex: 1;
+}
+
+.todoText:hover {
+  color: #3182ce;
+}
+
+/* Style for completed tasks as per design */
+.completedText {
+  color: #a0aec0;
+  text-decoration: line-through;
+}
+
+.button {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  box-sizing: border-box;
+}
+
+.cancelButton {
+  background-color: #edf2f7;
+  color: #4a5568;
+  margin-right: 8px;
+}
+
+.cancelButton:hover {
+  background-color: #e2e8f0;
+}
+
+.updateButton {
+  background-color: #3182ce;
+  color: #ffffff;
+}
+
+.updateButton:hover:not(:disabled) {
+  background-color: #2b6cb0;
+}
+
+.updateButton:disabled {
+  background-color: #e2e8f0;
+  color: #a0aec0;
+  cursor: not-allowed;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  cursor: pointer;
+}
+
+.checkboxInput {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #3182ce;
+}
+
+.actionsWrapper {
+  display: flex;
+  gap: 8px;
+}

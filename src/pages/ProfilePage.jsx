@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import styles from "./TodosPage.module.css"
 
 function ProfilePage() {
     const { email, token } = useAuth();
@@ -52,7 +53,7 @@ function ProfilePage() {
     }, [token]);
 
     return (
-        <div>
+        <div className={styles.container}>
             <h2>User Profile</h2>
 
             <div>

@@ -1,0 +1,28 @@
+.navList {
+    list-style: none;
+  display: flex;
+  gap: 20px;
+  padding: 0;
+  margin: 0;
+}
+
+.link {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #000000;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+  padding: 6px 0;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.link:hover {
+  color: #0777e0;
+}
+
+.active {
+  font-weight: 700;
+  color: #3182ce;
+  border-bottom: 2px solid #3182ce;
+}

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import TodoListItem from "./TodoListItem";
-
+import styles from "./TodoList.module.css"
 function TodoList({todoList, onCompleteTodo, onUpdateTodo, dataVersion, statusFilter = 'active' }) {
 
     const filteredTodoList = useMemo(() => {
@@ -38,9 +38,9 @@ function TodoList({todoList, onCompleteTodo, onUpdateTodo, dataVersion, statusFi
     };
 
     return filteredTodoList.todos.length == 0 ? (
-        <p>{getEmptyMessage()}</p> 
+        <p className={styles.emptyMessage}>{getEmptyMessage()}</p> 
         ) : (
-        <ul>
+        <ul className={styles.list}>
             {filteredTodoList.todos.map((todo) => (
                 <TodoListItem 
                     key={todo.id}

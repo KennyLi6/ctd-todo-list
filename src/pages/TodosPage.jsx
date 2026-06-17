@@ -12,6 +12,7 @@ import {
 import { useAuth } from '../contexts/AuthContext';
 import { useSearchParams } from 'react-router';
 import StatusFilter from '../shared/StatusFilter';
+import styles from "./TodosPage.module.css";
 
 function TodosPage() {
     const { token } = useAuth();
@@ -44,7 +45,7 @@ function TodosPage() {
                     sortBy,
                     sortDirection,
                     page: 0,
-                    limit: 99,
+                    limit: 99, //if limit default of 10, completed todos can block active todos
                 }
                 if (debouncedFilterTerm) {
                     paramsObject.find = debouncedFilterTerm;
@@ -59,7 +60,7 @@ function TodosPage() {
                     throw new Error(response.message || `Failed to fetch todos`);
                 }
                 const todos = await response.json();
-                console.log(todos.tasks)
+
                 dispatch({ 
                     type: TODO_ACTIONS.FETCH_SUCCESS,
                     payload: { todoList: todos.tasks }
@@ -216,42 +217,59 @@ function TodosPage() {
     }, []);
 
     return (
-        <div>
+        <div className={styles.container}>
             {error && (
-                <div>
+                <div className={styles.errorBox}>
                     <p>{error}</p>
-                    <button onClick={() => dispatch({ type: TODO_ACTIONS.CLEAR_ERROR })}>Clear Error</button>
+                    <button 
+                        className={styles.errorButton}
+                        onClick={() => dispatch({ type: TODO_ACTIONS.CLEAR_ERROR })}
+                    >
+                        Clear Error
+                    </button>
                 </div>
             )}
             {filterError && (
-                <div>
-                    <button onClick={() => dispatch({ type: TODO_ACTIONS.CLEAR_FILTER_ERROR })}>Clear Filter Error</button>
+                <div className={styles.filterErrorBox}>
+                    <button 
+                        className={styles.errorButton}
+                        onClick={() => dispatch({ type: TODO_ACTIONS.CLEAR_FILTER_ERROR })}
+                    >
+                        Clear Filter Error
+                    </button>
                     <p>{filterError}</p>
-                    <button onClick={() => dispatch({ type: TODO_ACTIONS.RESET_FILTERS })}>Reset Filters</button>
+                    <button 
+                        className={styles.errorButton}
+                        onClick={() => dispatch({ type: TODO_ACTIONS.RESET_FILTERS })}
+                    >
+                        Reset Filters
+                    </button>
                 </div>
             )}
             {isTodoListLoading && <div>Loading todos...</div>}
-            <SortBy 
-                sortBy={sortBy}
-                sortDirection={sortDirection}
-                onSortByChange={(newSortBy) => {
-                    dispatch({
-                        type: TODO_ACTIONS.SET_SORT,
-                        payload: { sortBy: newSortBy, sortDirection }
-                    })
-                }}
-                onSortDirectionChange={(newSortDirection) => {
-                    dispatch({
-                        type: TODO_ACTIONS.SET_SORT,
-                        payload: { sortBy, sortDirection: newSortDirection }
-                    })
-                }}
-            />
-            <StatusFilter />
-            <FilterInput 
-                filterTerm={filterTerm}
-                onFilterChange={handleFilterChange}
-            />
+            <div className={styles.controls}> 
+                <SortBy 
+                    sortBy={sortBy}
+                    sortDirection={sortDirection}
+                    onSortByChange={(newSortBy) => {
+                        dispatch({
+                            type: TODO_ACTIONS.SET_SORT,
+                            payload: { sortBy: newSortBy, sortDirection }
+                        })
+                    }}
+                    onSortDirectionChange={(newSortDirection) => {
+                        dispatch({
+                            type: TODO_ACTIONS.SET_SORT,
+                            payload: { sortBy, sortDirection: newSortDirection }
+                        })
+                    }}
+                />
+                <StatusFilter />
+                <FilterInput 
+                    filterTerm={filterTerm}
+                    onFilterChange={handleFilterChange}
+                />
+            </div>
             <TodoForm onAddTodo={addTodo}/>
             <TodoList 
                 todoList={todoList} 
